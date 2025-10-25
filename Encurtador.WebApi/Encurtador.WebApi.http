@@ -1,0 +1,6 @@
+@Encurtador.WebApi_HostAddress = http://localhost:5123
+
+GET {{Encurtador.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
