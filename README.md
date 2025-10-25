@@ -1,8 +1,8 @@
-Projeto Encurtador de URL Full-Stack
+#Projeto Encurtador de URL Full-Stack
 
 Este é um projeto de um encurtador de URLs construído com uma arquitetura robusta e focada em boas práticas de desenvolvimento, segurança e escalabilidade.
 
-Tecnologias Utilizadas:
+#Tecnologias Utilizadas:
 
 Backend: C# / .NET 8 (ASP.NET Core Web API)
 
@@ -12,39 +12,29 @@ Database: PostgreSQL
 
 Estilização: Tailwind CSS
 
-Arquitetura e Padrões:
-
+#Arquitetura e Padrões:
 O backend deste projeto foi estruturado seguindo os princípios da Clean Architecture, separando as responsabilidades em camadas distintas para facilitar a manutenção, testes e evolução do código.
 
-Estrutura do Backend:
+#Estrutura do Backend:
 
 A solução .sln é dividida em três projetos principais:
 
-Encurtador.Core (Camada de Domínio)
-
+Encurtador.Core (Camada de Domínio):
 Contém as entidades de negócio (ex: ShortUrl.cs).
-
 Define os "contratos" (Interfaces, ex: IUrlRepository.cs) que a camada de infraestrutura deve implementar.
-
 Não possui dependências externas (como banco de dados ou frameworks de API).
 
-Encurtador.Infrastructure (Camada de Infraestrutura)
-
+Encurtador.Infrastructure (Camada de Infraestrutura):
 Implementa as interfaces definidas no Core (ex: UrlRepository.cs).
-
 Contém toda a lógica de acesso a dados, incluindo o ApiDbContext do Entity Framework Core.
-
 Gerencia a comunicação com o PostgreSQL e a execução das migrações.
 
-Encurtador.WebApi (Camada de Apresentação/API)
-
+Encurtador.WebApi (Camada de Apresentação/API):
 É o projeto de "startup" que expõe os endpoints HTTP.
-
 Contém os Controladores (UrlController.cs), DTOs (ShortenRequestDto.cs) e a lógica de serviços da aplicação (UrlShorteningService.cs).
-
 Orquestra o fluxo de dados, recebendo requisições, validando-as e chamando as camadas inferiores.
 
-Padrões de Design Aplicados
+#Padrões de Design Aplicados:
 Repository Pattern: Abstrai a lógica de acesso aos dados. O UrlController não sabe como os dados são salvos; ele apenas usa a interface IUrlRepository, cuja implementação (UrlRepository) pode ser trocada (ex: de PostgreSQL para SQL Server) sem afetar o resto da aplicação.
 
 Dependency Injection (DI): Usamos a injeção de dependência nativa do .NET para "conectar" todas as camadas. O Program.cs é responsável por registrar os serviços e repositórios, que são automaticamente injetados nos construtores das classes que precisam deles (ex: IUrlRepository é injetado no UrlController).
@@ -62,73 +52,55 @@ Variáveis de Ambiente no Frontend (.env.local): O frontend Next.js não "chumba
 
 CORS (Cross-Origin Resource Sharing): A API é configurada explicitamente para aceitar requisições apenas da origem do frontend (http://localhost:3000), bloqueando tentativas de acesso de outros sites.
 
-Como Rodar o Projeto Localmente
+#Como Rodar o Projeto Localmente:
 Siga estes passos para configurar e executar a aplicação completa na sua máquina.
 
-Pré-requisitos
-.NET 8 SDK
+Pré-requisitos:
+.NET 8 SDK, Node.js (LTS), PostgreSQL (e o pgAdmin).
 
-Node.js (LTS)
-
-PostgreSQL (e o pgAdmin)
-
-Git
-
-1. Configuração do Banco de Dados
+1. Configuração do Banco de Dados:
 Abra o pgAdmin e crie um novo banco de dados vazio. (Ex: encurtador_prod_db).
 
-Anote seu usuário, senha e a porta do PostgreSQL (geralmente 5432).
+Anote seu usuário, senha e a porta do PostgreSQL(geralmente 5432).
 
-2. Configuração do Backend (.NET)
+2. Configuração do Backend (.NET):
 Abra um terminal e navegue até a pasta Encurtador.WebApi:
 
-Bash
-
 cd EncurtadorProjeto/Encurtador.WebApi
+
 Configure o User Secrets (Substitua pelos seus dados do PostgreSQL):
-
-Bash
-
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=encurtador_prod_db;Username=SEU_USUARIO;Password=SUA_SENHA;"
+
 Execute as Migrações para criar as tabelas no banco de dados:
-
-Bash
-
 dotnet ef database update
+
 Inicie o Backend:
-
-Bash
-
 dotnet run
+
 O terminal mostrará a URL em que a API está rodando (ex: http://localhost:5123). Anote essa URL.
 
 3. Configuração do Frontend (Next.js)
 Abra um novo terminal e navegue até a pasta EncurtadorWeb:
-
-Bash
-
 cd EncurtadorProjeto/EncurtadorWeb
+
+
 Instale as dependências:
-
-Bash
-
 npm install
-Crie o arquivo de ambiente:
 
+#Crie o arquivo de ambiente:
 Crie um arquivo chamado .env.local na raiz da pasta EncurtadorWeb.
 
 Adicione a URL da sua API (que você anotou no passo anterior):
+Em EncurtadorWeb/.env.local:
 
-Ini, TOML
-
-# Em EncurtadorWeb/.env.local
 NEXT_PUBLIC_API_URL=http://localhost:5123
-Inicie o Frontend:
 
-Bash
+#Inicie o Frontend:
 
 npm run dev
+
 4. Acesse a Aplicação
+
 Seu backend está rodando em http://localhost:5123 e seu frontend em http://localhost:3000.
 
 Abra seu navegador e acesse: http://localhost:3000
